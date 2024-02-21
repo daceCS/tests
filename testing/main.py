@@ -1,18 +1,68 @@
 import random
 import numpy
 import sys
+import operator
 
-answer = "words"
+def read_random_word():
+    with open("words.txt") as f:
+        word_array = f.read().splitlines()
+        return random.choice(word_array)
+
+answer = read_random_word()
 outputs = []
+loops = 0
+dictionary = []
+alphabet = [['a', 0],
+            ['b', 0],
+            ['c', 0],
+            ['d', 0],
+            ['e', 0],
+            ['f', 0],
+            ['g', 0],
+            ['h', 0],
+            ['i', 0],
+            ['j', 0],
+            ['k', 0],
+            ['l', 0],
+            ['m', 0],
+            ['n', 0],
+            ['o', 0],
+            ['p', 0],
+            ['q', 0],
+            ['r', 0],
+            ['s', 0],
+            ['t', 0],
+            ['u', 0],
+            ['v', 0],
+            ['w', 0],
+            ['x', 0],
+            ['y', 0],
+            ['z', 0]]
+
+
+def assign_value(arr):
+    for i in arr:
+        for j in alphabet:
+            if i[0] == j[0]:
+               j[1] = (j[1] + i[1])/loops
 
 
 def generate_string():
-    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-                'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
+    global loops
     random_string = ""
-    for i in range(5):
-        random_string += random.choice(alphabet)
+    if loops < 1000:
+        for i in range(5):
+            letter = alphabet[random.randint(0, 25)][0]
+            random_string += letter
+            loops += 1
+
+    else:
+        for i in range(5):
+            letter = alphabet[random.randint(0, 4)][0]
+            random_string += letter
+            loops += 1
+
+
 
     return random_string
 
@@ -45,7 +95,7 @@ def generate_output(guess):
                 output_string.append([guess[i], 0])
             else:
                 output_string.append([guess[i], -1])
-    return output_string[:10]
+    return output_string[:5]
 
 
 def generate_score(input_arr):
@@ -59,21 +109,19 @@ def generate_score(input_arr):
     return score
 
 
-high = rand_string = generate_string()
 
-for i in range(10000000):
-    print(i)
+for i in range(10000):
     rand_string = generate_string()
     output1 = generate_output(rand_string)
     score = generate_score(output1)
-    if score > generate_score(generate_output(high)):
-        high = rand_string
+    assign_value(output1)
+    alphabet = sorted(alphabet, key=lambda x: x[1], reverse=True)
     if rand_string == answer:
+
         break
 
 
-
-print(high)
-print(generate_score(generate_output(high)))
-
 print(answer)
+print(alphabet)
+
+
